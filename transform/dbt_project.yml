@@ -1,0 +1,20 @@
+name: 'ph_econ'
+version: '1.0.0'
+config-version: 2
+
+profile: 'ph_econ'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  ph_econ:
+    staging:
+      +materialized: view      # staging models are cheap to recompute, no need to persist
+    marts:
+      +materialized: table     # marts get queried repeatedly (by Streamlit later) - persist them

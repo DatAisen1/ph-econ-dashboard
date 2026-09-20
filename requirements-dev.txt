@@ -1,0 +1,10 @@
+# Dev/test-only dependencies. Never imported by pipeline code itself - a CI
+# runner or teammate doing a production deploy shouldn't need to install
+# pytest just to run the ingestion pipeline.
+#
+# Install with: pip install -r requirements-dev.txt
+# (pulls in requirements.txt too, via the -r line below)
+
+-r requirements.txt
+
+pytest==9.1.1

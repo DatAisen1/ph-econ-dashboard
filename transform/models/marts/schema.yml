@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: dim_country
+    description: "One row per country, from the version-controlled reference seed."
+    columns:
+      - name: country_code
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_country_comparison
+    description: "Country x indicator x year observations, enriched with country dimension attributes."
+    columns:
+      - name: country_code
+        tests:
+          - not_null
+          # THIS is the automated version of the manual missing_region check
+          # in staging/build_staging.py. If a country appears in the fact
+          # data with no matching row in dim_country - exactly the MYS
+          # scenario from Phase 2 - this test FAILS the dbt run. That's the
+          # concrete answer to "is dbt test checking my SQL or my
+          # assumptions about the data?" This test doesn't care whether the
+          # SQL is syntactically correct; it's checking whether an
+          # assumption ("every country in the fact table has a dimension
+          # row") actually holds against real data.
+          - relationships:
+              arguments:
+                to: ref('dim_country')
+                field: country_code
+      - name: indicator_code
+        tests:
+          - not_null
+      - name: year
+        tests:
+          - not_null

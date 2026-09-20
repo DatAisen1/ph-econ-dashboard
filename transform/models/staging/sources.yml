@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: raw_wb
+    description: "Raw World Bank data loaded by the dlt pipeline (ingestion/run_worldbank.py). dbt never writes here - only reads."
+    schema: raw_wb
+    tables:
+      - name: wb_observations
+        description: "One row per (country, indicator, year) observation, as returned by the World Bank API."
+
+  - name: raw_psa
+    description: "Raw PSA OpenSTAT CPI data loaded by the dlt pipeline (ingestion/run_psa_cpi.py). dbt never writes here - only reads."
+    schema: raw_psa
+    tables:
+      - name: cpi_observations
+        description: "One row per (geolocation, commodity, year, month) CPI observation, already melted from PXWeb's wide CSV export into long format during ingestion."

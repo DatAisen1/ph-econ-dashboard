@@ -1,0 +1,21 @@
+ph_econ:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # Same file dlt writes to in Phase 1 (ingestion/run_worldbank.py creates
+      # worldbank.duckdb in the ingestion/ folder by default). dbt reads the
+      # raw_wb.wb_observations table dlt already loaded there - this is the
+      # "dbt doesn't move data" principle made concrete: dbt never talks to
+      # the World Bank API, only to this file.
+      # Points to the SAME warehouse.duckdb that ingestion/run_worldbank.py
+      # and the Dagster asset both write to (both compute this as an
+      # absolute path anchored to their own file location - see the long
+      # comment in run_worldbank.py for why that matters). This relative
+      # path is resolved by dbt relative to the directory dbt is invoked
+      # from, which is always transform/ (whether you run `dbt run` after
+      # cd-ing here, or Dagster's DbtCliResource cd's here for you) - so
+      # unlike dlt's old bug, this side was never actually CWD-fragile.
+      # It just needed to point at the right target file.
+      path: ../warehouse.duckdb
+      schema: main

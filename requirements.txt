@@ -1,0 +1,22 @@
+# Runtime dependencies for the PH Econ Dashboard ingestion + staging pipeline.
+# Pinned to exact versions (==) rather than minimums (>=) for reproducibility -
+# "works on my machine" should mean the same thing on yours. Bump these
+# deliberately (and re-run tests) rather than letting pip silently pull newer
+# versions on a fresh install.
+
+dlt==1.30.0             # ingestion framework (World Bank, later PSA)
+duckdb==1.5.5           # warehouse / dlt destination
+requests==2.33.1        # HTTP client, wrapped in ingestion/http_client.py
+urllib3==2.6.3          # imported directly in http_client.py for Retry/HTTPAdapter -
+                        # NOT just a transitive dep of requests, so it's listed explicitly
+pandas==3.0.2           # staging transform (staging/transform.py)
+pyarrow==25.0.1         # Parquet read/write engine for pandas
+
+# Phase 3 - dbt
+dbt-core==1.12.5
+dbt-duckdb==1.11.0
+
+# Phase 4 - Dagster orchestration
+dagster==1.13.23
+dagster-webserver==1.13.23
+dagster-dbt==0.29.23

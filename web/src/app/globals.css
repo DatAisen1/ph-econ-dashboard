@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+  /* Design tokens from the plan - grounded in PSA/BSP institutional
+     authority + a restrained nod to the flag, not a generic SaaS palette. */
+  --color-surface: #FAFAF9;
+  --color-ink: #14171C;
+  --color-institutional: #1B3A5C;
+  --color-signal: #C08A2E;
+  --color-alert: #B0432F;
+  --color-muted: #6B7280;
+}
+
+@theme inline {
+  --color-surface: var(--color-surface);
+  --color-ink: var(--color-ink);
+  --color-institutional: var(--color-institutional);
+  --color-signal: var(--color-signal);
+  --color-alert: var(--color-alert);
+  --color-muted: var(--color-muted);
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}

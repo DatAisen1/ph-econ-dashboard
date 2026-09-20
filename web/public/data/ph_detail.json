@@ -1,0 +1,626 @@
+[
+  {
+    "date": "2018-01",
+    "Areas Outside National Capital Region (AONCR)": 97.3,
+    "National Capital Region (NCR)": 96.9,
+    "PHILIPPINES": 97.2
+  },
+  {
+    "date": "2018-02",
+    "Areas Outside National Capital Region (AONCR)": 97.9,
+    "National Capital Region (NCR)": 98.0,
+    "PHILIPPINES": 97.9
+  },
+  {
+    "date": "2018-03",
+    "Areas Outside National Capital Region (AONCR)": 98.3,
+    "National Capital Region (NCR)": 99.0,
+    "PHILIPPINES": 98.4
+  },
+  {
+    "date": "2018-04",
+    "Areas Outside National Capital Region (AONCR)": 98.7,
+    "National Capital Region (NCR)": 99.3,
+    "PHILIPPINES": 98.8
+  },
+  {
+    "date": "2018-05",
+    "Areas Outside National Capital Region (AONCR)": 98.9,
+    "National Capital Region (NCR)": 99.2,
+    "PHILIPPINES": 99.0
+  },
+  {
+    "date": "2018-06",
+    "Areas Outside National Capital Region (AONCR)": 99.4,
+    "National Capital Region (NCR)": 99.6,
+    "PHILIPPINES": 99.4
+  },
+  {
+    "date": "2018-07",
+    "Areas Outside National Capital Region (AONCR)": 100.2,
+    "National Capital Region (NCR)": 100.4,
+    "PHILIPPINES": 100.2
+  },
+  {
+    "date": "2018-08",
+    "Areas Outside National Capital Region (AONCR)": 101.1,
+    "National Capital Region (NCR)": 101.2,
+    "PHILIPPINES": 101.1
+  },
+  {
+    "date": "2018-09",
+    "Areas Outside National Capital Region (AONCR)": 102.2,
+    "National Capital Region (NCR)": 101.8,
+    "PHILIPPINES": 102.1
+  },
+  {
+    "date": "2018-10",
+    "Areas Outside National Capital Region (AONCR)": 102.4,
+    "National Capital Region (NCR)": 101.7,
+    "PHILIPPINES": 102.3
+  },
+  {
+    "date": "2018-11",
+    "Areas Outside National Capital Region (AONCR)": 102.1,
+    "National Capital Region (NCR)": 101.7,
+    "PHILIPPINES": 102.0
+  },
+  {
+    "date": "2018-12",
+    "Areas Outside National Capital Region (AONCR)": 101.4,
+    "National Capital Region (NCR)": 101.2,
+    "PHILIPPINES": 101.4
+  },
+  {
+    "date": "2019-01",
+    "Areas Outside National Capital Region (AONCR)": 101.5,
+    "National Capital Region (NCR)": 101.4,
+    "PHILIPPINES": 101.5
+  },
+  {
+    "date": "2019-02",
+    "Areas Outside National Capital Region (AONCR)": 101.6,
+    "National Capital Region (NCR)": 101.7,
+    "PHILIPPINES": 101.6
+  },
+  {
+    "date": "2019-03",
+    "Areas Outside National Capital Region (AONCR)": 101.7,
+    "National Capital Region (NCR)": 101.8,
+    "PHILIPPINES": 101.7
+  },
+  {
+    "date": "2019-04",
+    "Areas Outside National Capital Region (AONCR)": 101.9,
+    "National Capital Region (NCR)": 102.2,
+    "PHILIPPINES": 102.0
+  },
+  {
+    "date": "2019-05",
+    "Areas Outside National Capital Region (AONCR)": 102.1,
+    "National Capital Region (NCR)": 102.4,
+    "PHILIPPINES": 102.2
+  },
+  {
+    "date": "2019-06",
+    "Areas Outside National Capital Region (AONCR)": 102.1,
+    "National Capital Region (NCR)": 102.3,
+    "PHILIPPINES": 102.1
+  },
+  {
+    "date": "2019-07",
+    "Areas Outside National Capital Region (AONCR)": 102.4,
+    "National Capital Region (NCR)": 102.4,
+    "PHILIPPINES": 102.4
+  },
+  {
+    "date": "2019-08",
+    "Areas Outside National Capital Region (AONCR)": 102.5,
+    "National Capital Region (NCR)": 102.4,
+    "PHILIPPINES": 102.5
+  },
+  {
+    "date": "2019-09",
+    "Areas Outside National Capital Region (AONCR)": 102.7,
+    "National Capital Region (NCR)": 102.3,
+    "PHILIPPINES": 102.6
+  },
+  {
+    "date": "2019-10",
+    "Areas Outside National Capital Region (AONCR)": 102.9,
+    "National Capital Region (NCR)": 102.7,
+    "PHILIPPINES": 102.9
+  },
+  {
+    "date": "2019-11",
+    "Areas Outside National Capital Region (AONCR)": 103.2,
+    "National Capital Region (NCR)": 103.1,
+    "PHILIPPINES": 103.2
+  },
+  {
+    "date": "2019-12",
+    "Areas Outside National Capital Region (AONCR)": 103.8,
+    "National Capital Region (NCR)": 103.9,
+    "PHILIPPINES": 103.8
+  },
+  {
+    "date": "2020-01",
+    "Areas Outside National Capital Region (AONCR)": 104.6,
+    "National Capital Region (NCR)": 103.9,
+    "PHILIPPINES": 104.5
+  },
+  {
+    "date": "2020-02",
+    "Areas Outside National Capital Region (AONCR)": 104.3,
+    "National Capital Region (NCR)": 103.4,
+    "PHILIPPINES": 104.1
+  },
+  {
+    "date": "2020-03",
+    "Areas Outside National Capital Region (AONCR)": 104.0,
+    "National Capital Region (NCR)": 103.3,
+    "PHILIPPINES": 103.9
+  },
+  {
+    "date": "2020-04",
+    "Areas Outside National Capital Region (AONCR)": 104.0,
+    "National Capital Region (NCR)": 103.2,
+    "PHILIPPINES": 103.8
+  },
+  {
+    "date": "2020-05",
+    "Areas Outside National Capital Region (AONCR)": 104.0,
+    "National Capital Region (NCR)": 103.2,
+    "PHILIPPINES": 103.8
+  },
+  {
+    "date": "2020-06",
+    "Areas Outside National Capital Region (AONCR)": 104.6,
+    "National Capital Region (NCR)": 103.6,
+    "PHILIPPINES": 104.4
+  },
+  {
+    "date": "2020-07",
+    "Areas Outside National Capital Region (AONCR)": 105.2,
+    "National Capital Region (NCR)": 103.8,
+    "PHILIPPINES": 104.9
+  },
+  {
+    "date": "2020-08",
+    "Areas Outside National Capital Region (AONCR)": 105.0,
+    "National Capital Region (NCR)": 103.8,
+    "PHILIPPINES": 104.8
+  },
+  {
+    "date": "2020-09",
+    "Areas Outside National Capital Region (AONCR)": 105.2,
+    "National Capital Region (NCR)": 103.8,
+    "PHILIPPINES": 104.9
+  },
+  {
+    "date": "2020-10",
+    "Areas Outside National Capital Region (AONCR)": 105.5,
+    "National Capital Region (NCR)": 104.5,
+    "PHILIPPINES": 105.3
+  },
+  {
+    "date": "2020-11",
+    "Areas Outside National Capital Region (AONCR)": 106.5,
+    "National Capital Region (NCR)": 105.7,
+    "PHILIPPINES": 106.3
+  },
+  {
+    "date": "2020-12",
+    "Areas Outside National Capital Region (AONCR)": 107.4,
+    "National Capital Region (NCR)": 106.2,
+    "PHILIPPINES": 107.2
+  },
+  {
+    "date": "2021-01",
+    "Areas Outside National Capital Region (AONCR)": 108.7,
+    "National Capital Region (NCR)": 107.4,
+    "PHILIPPINES": 108.4
+  },
+  {
+    "date": "2021-02",
+    "Areas Outside National Capital Region (AONCR)": 108.9,
+    "National Capital Region (NCR)": 106.7,
+    "PHILIPPINES": 108.5
+  },
+  {
+    "date": "2021-03",
+    "Areas Outside National Capital Region (AONCR)": 108.8,
+    "National Capital Region (NCR)": 105.9,
+    "PHILIPPINES": 108.2
+  },
+  {
+    "date": "2021-04",
+    "Areas Outside National Capital Region (AONCR)": 108.7,
+    "National Capital Region (NCR)": 105.7,
+    "PHILIPPINES": 108.1
+  },
+  {
+    "date": "2021-05",
+    "Areas Outside National Capital Region (AONCR)": 108.7,
+    "National Capital Region (NCR)": 105.9,
+    "PHILIPPINES": 108.1
+  },
+  {
+    "date": "2021-06",
+    "Areas Outside National Capital Region (AONCR)": 108.8,
+    "National Capital Region (NCR)": 106.3,
+    "PHILIPPINES": 108.3
+  },
+  {
+    "date": "2021-07",
+    "Areas Outside National Capital Region (AONCR)": 109.3,
+    "National Capital Region (NCR)": 106.8,
+    "PHILIPPINES": 108.8
+  },
+  {
+    "date": "2021-08",
+    "Areas Outside National Capital Region (AONCR)": 110.0,
+    "National Capital Region (NCR)": 107.2,
+    "PHILIPPINES": 109.4
+  },
+  {
+    "date": "2021-09",
+    "Areas Outside National Capital Region (AONCR)": 109.9,
+    "National Capital Region (NCR)": 106.9,
+    "PHILIPPINES": 109.3
+  },
+  {
+    "date": "2021-10",
+    "Areas Outside National Capital Region (AONCR)": 110.1,
+    "National Capital Region (NCR)": 107.1,
+    "PHILIPPINES": 109.5
+  },
+  {
+    "date": "2021-11",
+    "Areas Outside National Capital Region (AONCR)": 110.8,
+    "National Capital Region (NCR)": 108.0,
+    "PHILIPPINES": 110.2
+  },
+  {
+    "date": "2021-12",
+    "Areas Outside National Capital Region (AONCR)": 111.0,
+    "National Capital Region (NCR)": 108.4,
+    "PHILIPPINES": 110.5
+  },
+  {
+    "date": "2022-01",
+    "Areas Outside National Capital Region (AONCR)": 112.5,
+    "National Capital Region (NCR)": 108.8,
+    "PHILIPPINES": 111.7
+  },
+  {
+    "date": "2022-02",
+    "Areas Outside National Capital Region (AONCR)": 112.6,
+    "National Capital Region (NCR)": 108.7,
+    "PHILIPPINES": 111.8
+  },
+  {
+    "date": "2022-03",
+    "Areas Outside National Capital Region (AONCR)": 113.3,
+    "National Capital Region (NCR)": 109.5,
+    "PHILIPPINES": 112.5
+  },
+  {
+    "date": "2022-04",
+    "Areas Outside National Capital Region (AONCR)": 114.2,
+    "National Capital Region (NCR)": 110.3,
+    "PHILIPPINES": 113.4
+  },
+  {
+    "date": "2022-05",
+    "Areas Outside National Capital Region (AONCR)": 114.7,
+    "National Capital Region (NCR)": 110.9,
+    "PHILIPPINES": 113.9
+  },
+  {
+    "date": "2022-06",
+    "Areas Outside National Capital Region (AONCR)": 115.6,
+    "National Capital Region (NCR)": 112.2,
+    "PHILIPPINES": 114.9
+  },
+  {
+    "date": "2022-07",
+    "Areas Outside National Capital Region (AONCR)": 116.7,
+    "National Capital Region (NCR)": 112.3,
+    "PHILIPPINES": 115.8
+  },
+  {
+    "date": "2022-08",
+    "Areas Outside National Capital Region (AONCR)": 117.1,
+    "National Capital Region (NCR)": 113.3,
+    "PHILIPPINES": 116.3
+  },
+  {
+    "date": "2022-09",
+    "Areas Outside National Capital Region (AONCR)": 117.6,
+    "National Capital Region (NCR)": 113.9,
+    "PHILIPPINES": 116.8
+  },
+  {
+    "date": "2022-10",
+    "Areas Outside National Capital Region (AONCR)": 118.5,
+    "National Capital Region (NCR)": 115.3,
+    "PHILIPPINES": 117.9
+  },
+  {
+    "date": "2022-11",
+    "Areas Outside National Capital Region (AONCR)": 119.7,
+    "National Capital Region (NCR)": 116.1,
+    "PHILIPPINES": 119.0
+  },
+  {
+    "date": "2022-12",
+    "Areas Outside National Capital Region (AONCR)": 120.1,
+    "National Capital Region (NCR)": 116.6,
+    "PHILIPPINES": 119.4
+  },
+  {
+    "date": "2023-01",
+    "Areas Outside National Capital Region (AONCR)": 122.256287255103,
+    "National Capital Region (NCR)": 118.175542472712,
+    "PHILIPPINES": 121.4
+  },
+  {
+    "date": "2023-02",
+    "Areas Outside National Capital Region (AONCR)": 122.165864866925,
+    "National Capital Region (NCR)": 118.184351630117,
+    "PHILIPPINES": 121.4
+  },
+  {
+    "date": "2023-03",
+    "Areas Outside National Capital Region (AONCR)": 121.847091200631,
+    "National Capital Region (NCR)": 117.996657458092,
+    "PHILIPPINES": 121.1
+  },
+  {
+    "date": "2023-04",
+    "Areas Outside National Capital Region (AONCR)": 121.573430414287,
+    "National Capital Region (NCR)": 118.081396925839,
+    "PHILIPPINES": 120.9
+  },
+  {
+    "date": "2023-05",
+    "Areas Outside National Capital Region (AONCR)": 121.62871006878,
+    "National Capital Region (NCR)": 118.139651606726,
+    "PHILIPPINES": 120.9
+  },
+  {
+    "date": "2023-06",
+    "Areas Outside National Capital Region (AONCR)": 121.745381759344,
+    "National Capital Region (NCR)": 118.441994667363,
+    "PHILIPPINES": 121.1
+  },
+  {
+    "date": "2023-07",
+    "Areas Outside National Capital Region (AONCR)": 121.855715848674,
+    "National Capital Region (NCR)": 118.551348221979,
+    "PHILIPPINES": 121.2
+  },
+  {
+    "date": "2023-08",
+    "Areas Outside National Capital Region (AONCR)": 123.178902591608,
+    "National Capital Region (NCR)": 119.963375793739,
+    "PHILIPPINES": 122.5
+  },
+  {
+    "date": "2023-09",
+    "Areas Outside National Capital Region (AONCR)": 124.697261313937,
+    "National Capital Region (NCR)": 120.795452084199,
+    "PHILIPPINES": 123.9
+  },
+  {
+    "date": "2023-10",
+    "Areas Outside National Capital Region (AONCR)": 124.324843008873,
+    "National Capital Region (NCR)": 121.003210883918,
+    "PHILIPPINES": 123.7
+  },
+  {
+    "date": "2023-11",
+    "Areas Outside National Capital Region (AONCR)": 124.64082985223,
+    "National Capital Region (NCR)": 120.947520931883,
+    "PHILIPPINES": 123.9
+  },
+  {
+    "date": "2023-12",
+    "Areas Outside National Capital Region (AONCR)": 124.9022697,
+    "National Capital Region (NCR)": 120.736393874992,
+    "PHILIPPINES": 124.1
+  },
+  {
+    "date": "2024-01",
+    "Areas Outside National Capital Region (AONCR)": 125.63160423437,
+    "National Capital Region (NCR)": 121.448758111642,
+    "PHILIPPINES": 124.8
+  },
+  {
+    "date": "2024-02",
+    "Areas Outside National Capital Region (AONCR)": 126.423668506345,
+    "National Capital Region (NCR)": 121.933247424118,
+    "PHILIPPINES": 125.5
+  },
+  {
+    "date": "2024-03",
+    "Areas Outside National Capital Region (AONCR)": 126.492981836233,
+    "National Capital Region (NCR)": 121.859758374352,
+    "PHILIPPINES": 125.6
+  },
+  {
+    "date": "2024-04",
+    "Areas Outside National Capital Region (AONCR)": 126.545194439119,
+    "National Capital Region (NCR)": 121.368260447464,
+    "PHILIPPINES": 125.5
+  },
+  {
+    "date": "2024-05",
+    "Areas Outside National Capital Region (AONCR)": 126.570523201966,
+    "National Capital Region (NCR)": 121.839065408439,
+    "PHILIPPINES": 125.6
+  },
+  {
+    "date": "2024-06",
+    "Areas Outside National Capital Region (AONCR)": 126.786320651393,
+    "National Capital Region (NCR)": 121.150113005612,
+    "PHILIPPINES": 125.6
+  },
+  {
+    "date": "2024-07",
+    "Areas Outside National Capital Region (AONCR)": 127.425595450053,
+    "National Capital Region (NCR)": 122.925811327818,
+    "PHILIPPINES": 126.5
+  },
+  {
+    "date": "2024-08",
+    "Areas Outside National Capital Region (AONCR)": 127.609295784596,
+    "National Capital Region (NCR)": 122.762434251992,
+    "PHILIPPINES": 126.6
+  },
+  {
+    "date": "2024-09",
+    "Areas Outside National Capital Region (AONCR)": 127.181328209296,
+    "National Capital Region (NCR)": 122.822964999747,
+    "PHILIPPINES": 126.3
+  },
+  {
+    "date": "2024-10",
+    "Areas Outside National Capital Region (AONCR)": 127.520638604672,
+    "National Capital Region (NCR)": 122.6895579466,
+    "PHILIPPINES": 126.5
+  },
+  {
+    "date": "2024-11",
+    "Areas Outside National Capital Region (AONCR)": 127.829137171575,
+    "National Capital Region (NCR)": 123.654960972758,
+    "PHILIPPINES": 127.0
+  },
+  {
+    "date": "2024-12",
+    "Areas Outside National Capital Region (AONCR)": 128.496354983872,
+    "National Capital Region (NCR)": 124.465308218605,
+    "PHILIPPINES": 127.7
+  },
+  {
+    "date": "2025-01",
+    "Areas Outside National Capital Region (AONCR)": 129.285475657392,
+    "National Capital Region (NCR)": 124.885614463195,
+    "PHILIPPINES": 128.4
+  },
+  {
+    "date": "2025-02",
+    "Areas Outside National Capital Region (AONCR)": 128.999553677511,
+    "National Capital Region (NCR)": 124.688901568152,
+    "PHILIPPINES": 128.1
+  },
+  {
+    "date": "2025-03",
+    "Areas Outside National Capital Region (AONCR)": 128.716436382157,
+    "National Capital Region (NCR)": 124.412429891265,
+    "PHILIPPINES": 127.8
+  },
+  {
+    "date": "2025-04",
+    "Areas Outside National Capital Region (AONCR)": 128.06443308261,
+    "National Capital Region (NCR)": 124.320770471799,
+    "PHILIPPINES": 127.3
+  },
+  {
+    "date": "2025-05",
+    "Areas Outside National Capital Region (AONCR)": 128.083058732348,
+    "National Capital Region (NCR)": 123.947717312096,
+    "PHILIPPINES": 127.2
+  },
+  {
+    "date": "2025-06",
+    "Areas Outside National Capital Region (AONCR)": 128.129652313885,
+    "National Capital Region (NCR)": 124.252797100021,
+    "PHILIPPINES": 127.3
+  },
+  {
+    "date": "2025-07",
+    "Areas Outside National Capital Region (AONCR)": 128.321589342316,
+    "National Capital Region (NCR)": 125.037197000295,
+    "PHILIPPINES": 127.7
+  },
+  {
+    "date": "2025-08",
+    "Areas Outside National Capital Region (AONCR)": 129.048674363119,
+    "National Capital Region (NCR)": 126.380972815737,
+    "PHILIPPINES": 128.5
+  },
+  {
+    "date": "2025-09",
+    "Areas Outside National Capital Region (AONCR)": 129.03390362289,
+    "National Capital Region (NCR)": 126.181648205253,
+    "PHILIPPINES": 128.5
+  },
+  {
+    "date": "2025-10",
+    "Areas Outside National Capital Region (AONCR)": 129.170927779918,
+    "National Capital Region (NCR)": 126.259988070738,
+    "PHILIPPINES": 128.6
+  },
+  {
+    "date": "2025-11",
+    "Areas Outside National Capital Region (AONCR)": 129.312378669565,
+    "National Capital Region (NCR)": 127.123566872157,
+    "PHILIPPINES": 128.9
+  },
+  {
+    "date": "2025-12",
+    "Areas Outside National Capital Region (AONCR)": 130.652858529348,
+    "National Capital Region (NCR)": 127.323636374363,
+    "PHILIPPINES": 130.0
+  },
+  {
+    "date": "2026-01",
+    "Areas Outside National Capital Region (AONCR)": 131.9,
+    "National Capital Region (NCR)": 127.3,
+    "PHILIPPINES": 131.0
+  },
+  {
+    "date": "2026-02",
+    "Areas Outside National Capital Region (AONCR)": 132.2,
+    "National Capital Region (NCR)": 127.1,
+    "PHILIPPINES": 131.2
+  },
+  {
+    "date": "2026-03",
+    "Areas Outside National Capital Region (AONCR)": 134.1,
+    "National Capital Region (NCR)": 128.8,
+    "PHILIPPINES": 133.0
+  },
+  {
+    "date": "2026-04",
+    "Areas Outside National Capital Region (AONCR)": 137.9,
+    "National Capital Region (NCR)": 131.2,
+    "PHILIPPINES": 136.5
+  },
+  {
+    "date": "2026-05",
+    "Areas Outside National Capital Region (AONCR)": 137.2,
+    "National Capital Region (NCR)": 130.2,
+    "PHILIPPINES": 135.8
+  },
+  {
+    "date": "2026-06",
+    "Areas Outside National Capital Region (AONCR)": 136.8,
+    "National Capital Region (NCR)": 130.3,
+    "PHILIPPINES": 135.5
+  },
+  {
+    "date": "2026-07",
+    "Areas Outside National Capital Region (AONCR)": 136.9,
+    "National Capital Region (NCR)": 130.6,
+    "PHILIPPINES": 135.6
+  },
+  {
+    "date": "2026-08",
+    "Areas Outside National Capital Region (AONCR)": 137.6,
+    "National Capital Region (NCR)": 131.6,
+    "PHILIPPINES": 136.4
+  }
+]

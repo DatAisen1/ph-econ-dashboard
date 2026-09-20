@@ -19,9 +19,12 @@ __pycache__/
 *.duckdb.wal
 raw/
 
+# --- Logs ---
+**/logs/
+*.log
+
 # --- dbt ---
 transform/target/
-transform/logs/
 transform/dbt_packages/
 transform/.user.yml
 

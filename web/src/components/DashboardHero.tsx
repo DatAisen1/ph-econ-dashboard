@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import PhZoneMap from "./PhZoneMap";
+import PhZoneMap, { type MapMetric } from "./PhZoneMap";
 import CpiTrendChart from "./CpiTrendChart";
+import CpiKpiSection from "./CpiKpiSection";
+import CpiUnderstanding from "./CpiUnderstanding";
+import CommodityBreakdownChart from "./CommodityBreakdownChart";
+import RegionalComparisonTable from "./RegionalComparisonTable";
 import ChangeBadge from "./ChangeBadge";
-import type { PhDetailRecord } from "@/lib/types";
+import type { PhCommodityRecord, PhDetailRecord } from "@/lib/types";
 import type { ChangeResult } from "@/lib/format";
-
-const ZONE_TO_CHART_KEY: Record<string, string> = {
-  NCR: "National Capital Region (NCR)",
-  AONCR: "Areas Outside National Capital Region (AONCR)",
-};
 
 export default function DashboardHero({
   phDetail,
+  phCommodity,
   geojson,
   latestDate,
   latestNational,
@@ -21,6 +21,7 @@ export default function DashboardHero({
   yoyChange,
 }: {
   phDetail: PhDetailRecord[];
+  phCommodity: PhCommodityRecord[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   geojson: any;
   latestDate: string;
@@ -29,6 +30,12 @@ export default function DashboardHero({
   yoyChange: ChangeResult | null;
 }) {
   const [selectedZone, setSelectedZone] = useState<string | null>(null);
+  const [metric, setMetric] = useState<MapMetric>("index");
+  const [resetToken, setResetToken] = useState(0);
+  const selectedRegion = selectedZone
+    ? geojson.features.find((feature: { properties: { zone_id: string } }) => feature.properties.zone_id === selectedZone)
+        ?.properties.psa_geolocation_name ?? null
+    : null;
 
   return (
     <>
@@ -54,8 +61,8 @@ export default function DashboardHero({
           </div>
           <p className="text-sm text-muted mt-6">
             {selectedZone
-              ? `Showing ${selectedZone === "NCR" ? "National Capital Region" : "Areas Outside NCR"} in the chart below.`
-              : "Click a zone on the map to highlight it in the chart below."}
+              ? `Showing ${selectedRegion ?? "the selected region"} against the national index below.`
+              : "Click a region on the map to highlight it against the national index below."}
           </p>
         </div>
         <div className="flex justify-center">
@@ -63,6 +70,7 @@ export default function DashboardHero({
             geojson={geojson}
             phDetail={phDetail}
             selectedZone={selectedZone}
+            metric={metric}
             onSelectZone={(zoneId) =>
               setSelectedZone((current) => (current === zoneId ? null : zoneId))
             }
@@ -70,15 +78,38 @@ export default function DashboardHero({
         </div>
       </div>
 
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
+        <div>
+          <p className="font-mono text-xs text-muted">MAP METRIC</p>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {(["index", "yoy", "mom"] as MapMetric[]).map((option) => (
+              <button key={option} type="button" onClick={() => setMetric(option)} className={`text-xs font-mono px-3 py-1.5 border ${metric === option ? "bg-institutional text-white border-institutional" : "text-muted border-black/15"}`}>
+                {option === "index" ? "CPI index" : option === "yoy" ? "YoY" : "MoM"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <button type="button" onClick={() => { setSelectedZone(null); setMetric("index"); setResetToken((value) => value + 1); }} className="text-xs font-mono text-muted border border-black/15 px-3 py-1.5 hover:border-institutional">
+          Reset filters
+        </button>
+      </div>
+
+      <CpiKpiSection phDetail={phDetail} phCommodity={phCommodity} />
+      <CpiUnderstanding latestValue={latestNational} latestDate={latestDate} />
+
       <section>
-        <h2 className="font-display text-xl mb-6">
-          CPI trend, National Capital Region and rest of the country
-        </h2>
+        <h2 className="font-display text-xl">How has the price level changed since 2018?</h2>
+        <p className="text-sm text-muted mt-2 mb-6">
+          Consumer Price Index (CPI), where 2018 = 100. The national series is shown with the selected region when one is highlighted.
+        </p>
         <CpiTrendChart
           data={phDetail}
-          highlightKey={selectedZone ? ZONE_TO_CHART_KEY[selectedZone] : null}
+          highlightKey={selectedRegion}
         />
       </section>
+
+      <RegionalComparisonTable key={resetToken} data={phDetail} geojson={geojson} metric={metric} onMetricChange={setMetric} />
+      <CommodityBreakdownChart key={resetToken} data={phCommodity} regions={["PHILIPPINES", ...geojson.features.map((feature: { properties: { psa_geolocation_name: string } }) => feature.properties.psa_geolocation_name)]} />
     </>
   );
 }

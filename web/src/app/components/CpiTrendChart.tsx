@@ -15,18 +15,18 @@ import {
 import type { PhDetailRecord } from "@/lib/types";
 import { downloadCsv, downloadChartAsPng } from "@/lib/chartExport";
 
-const SERIES = [
-  { key: "PHILIPPINES", label: "Philippines (national)", color: "var(--color-institutional)" },
-  { key: "National Capital Region (NCR)", label: "NCR", color: "var(--color-signal)" },
-  { key: "Areas Outside National Capital Region (AONCR)", label: "AONCR", color: "var(--color-muted)" },
-] as const;
+const NATIONAL_KEY = "PHILIPPINES";
+const NATIONAL_COLOR = "var(--color-institutional)";
+const SELECTED_COLOR = "var(--color-signal)";
 
 export default function CpiTrendChart({
   data,
-  highlightKey,
+  selectedRegion,
+  selectedRegionLabel,
 }: {
   data: PhDetailRecord[];
-  highlightKey?: string | null;
+  selectedRegion?: string | null; // the exact psa_geolocation_name key, or null
+  selectedRegionLabel?: string; // short display label, e.g. "Region III"
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
@@ -85,32 +85,36 @@ export default function CpiTrendChart({
               labelStyle={{ fontFamily: "var(--font-mono)", fontWeight: 600 }}
             />
             <Legend wrapperStyle={{ fontFamily: "var(--font-sans)", fontSize: 13 }} />
-            {SERIES.map((s) => {
-              const isDimmed = highlightKey != null && s.key !== highlightKey;
-              return (
-                <Line
-                  key={s.key}
-                  type="monotone"
-                  dataKey={s.key}
-                  name={s.label}
-                  stroke={s.color}
-                  strokeWidth={isDimmed ? 1 : 2.5}
-                  strokeOpacity={isDimmed ? 0.35 : 1}
-                  dot={false}
-                  connectNulls
-                />
-              );
-            })}
-            {/* Brush = the zoom / date-range control. Recharts renders it
-                as a mini overview chart below the main one - drag the
-                handles to zoom into a range. Native to Recharts, no
-                extra dependency needed. */}
-            <Brush
-              dataKey="date"
-              height={24}
-              stroke="var(--color-institutional)"
-              travellerWidth={8}
+
+            {/* National line: always shown, the constant baseline. */}
+            <Line
+              type="monotone"
+              dataKey={NATIONAL_KEY}
+              name="Philippines (national)"
+              stroke={NATIONAL_COLOR}
+              strokeWidth={2.5}
+              dot={false}
+              connectNulls
             />
+
+            {/* Selected region's line: only rendered when a region is
+                picked on the map. With 18 possible regions, showing all
+                of them at once would be unreadable - one at a time
+                against the national baseline is the actual comparison
+                a viewer wants to make. */}
+            {selectedRegion && (
+              <Line
+                type="monotone"
+                dataKey={selectedRegion}
+                name={selectedRegionLabel ?? selectedRegion}
+                stroke={SELECTED_COLOR}
+                strokeWidth={2.5}
+                dot={false}
+                connectNulls
+              />
+            )}
+
+            <Brush dataKey="date" height={24} stroke="var(--color-institutional)" travellerWidth={8} />
           </LineChart>
         </ResponsiveContainer>
       </div>

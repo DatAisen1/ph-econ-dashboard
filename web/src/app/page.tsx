@@ -1,41 +1,27 @@
 import phDetailData from "../../public/data/ph_detail.json";
-import zonesGeoJson from "../../public/data/ph_zones.json";
+import regionsGeoJson from "../../public/data/ph_regions.json";
+import phCommodityData from "../../public/data/ph_commodity.json";
 import metadata from "../../public/data/metadata.json";
 import SiteHeader from "@/components/SiteHeader";
 import DashboardHero from "@/components/DashboardHero";
+import DataProvenance from "@/components/DataProvenance";
+import KeyTakeaways from "@/components/KeyTakeaways";
 import LastUpdated from "@/components/LastUpdated";
-import { computeChange } from "@/lib/format";
-import type { PhDetailRecord, ExportMetadata } from "@/lib/types";
+import { getCpiOverviewMetrics } from "@/lib/cpiMetrics";
+import type {
+  ExportMetadata,
+  PhCommodityRecord,
+  PhDetailRecord,
+  RegionGeoJson,
+} from "@/lib/types";
 
 const phDetail = phDetailData as PhDetailRecord[];
+const phCommodity = phCommodityData as PhCommodityRecord[];
 const meta = metadata as ExportMetadata;
-
-function findLatestNationalIndex(data: PhDetailRecord[]): number {
-  // Last row isn't guaranteed to have a value - trailing months can be
-  // entirely unpublished and get dropped by the export's pivot for OTHER
-  // zones while this one still has a gap.
-  for (let i = data.length - 1; i >= 0; i--) {
-    if (data[i].PHILIPPINES !== null) return i;
-  }
-  return -1;
-}
+const regions = regionsGeoJson as unknown as RegionGeoJson;
 
 export default function Home() {
-  const latestIndex = findLatestNationalIndex(phDetail);
-  const latest = latestIndex >= 0 ? phDetail[latestIndex] : null;
-
-  // MoM: the immediately preceding row. YoY: 12 rows back, since this
-  // series is monthly - both are simple index arithmetic once we know
-  // where "latest" actually is (not just the last array entry).
-  const momPrevious = latestIndex >= 1 ? phDetail[latestIndex - 1] : null;
-  const yoyPrevious = latestIndex >= 12 ? phDetail[latestIndex - 12] : null;
-
-  const momChange = latest
-    ? computeChange(latest.PHILIPPINES, momPrevious?.PHILIPPINES ?? null)
-    : null;
-  const yoyChange = latest
-    ? computeChange(latest.PHILIPPINES, yoyPrevious?.PHILIPPINES ?? null)
-    : null;
+  const metrics = getCpiOverviewMetrics(phDetail, phCommodity);
 
   return (
     <>
@@ -45,15 +31,36 @@ export default function Home() {
           <LastUpdated isoTimestamp={meta.exported_at_utc} />
         </div>
 
-        {latest && latest.PHILIPPINES !== null ? (
-          <DashboardHero
-            phDetail={phDetail}
-            geojson={zonesGeoJson}
-            latestDate={latest.date}
-            latestNational={latest.PHILIPPINES}
-            momChange={momChange}
-            yoyChange={yoyChange}
-          />
+        {metrics.latestDate && metrics.nationalCpi !== null ? (
+          <>
+            <DashboardHero
+              phDetail={phDetail}
+              phCommodity={phCommodity}
+              geojson={regions}
+              latestDate={metrics.latestDate}
+              latestNational={metrics.nationalCpi}
+              momChange={metrics.mom}
+              yoyChange={metrics.yoy}
+            />
+            <KeyTakeaways
+              latestDate={metrics.latestDate}
+              nationalCpi={metrics.nationalCpi}
+              yoyPercent={metrics.yoy?.percent ?? null}
+              yoyDate={metrics.yoyDate}
+              momPercent={metrics.mom?.percent ?? null}
+              momDate={metrics.momDate}
+              foodCpi={metrics.foodCpi}
+            />
+            <DataProvenance
+              source="Philippine Statistics Authority OpenSTAT"
+              sourceUrl="https://openstat.psa.gov.ph"
+              dataset="Consumer Price Index"
+              frequency="Monthly"
+              basePeriod="2018 = 100"
+              latestObservation={metrics.latestDate}
+              refreshedAt={meta.exported_at_utc}
+            />
+          </>
         ) : (
           <p className="text-muted">No published CPI data available yet.</p>
         )}

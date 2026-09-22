@@ -40,3 +40,15 @@ export function formatRelativeTime(isoTimestamp: string): string {
   const diffDays = Math.round(diffHours / 24);
   return `${diffDays}d ago`;
 }
+
+/**
+ * PhDetailRecord's region columns are typed `string | number | null`
+ * (an index signature, since the actual set of region keys is only known
+ * at data-load time - see lib/types.ts). Real values are always numbers
+ * or null in practice, but the TYPE allows string, so consuming code
+ * needs an explicit runtime narrowing rather than an `as number` cast
+ * that would silently hide a real data-shape bug if one ever occurred.
+ */
+export function asNumericOrNull(value: string | number | null | undefined): number | null {
+  return typeof value === "number" ? value : null;
+}

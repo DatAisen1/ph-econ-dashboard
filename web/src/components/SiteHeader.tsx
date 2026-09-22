@@ -16,6 +16,9 @@ export default function SiteHeader() {
         <Link href="/about" className="text-muted hover:text-ink transition-colors">
           About
         </Link>
+        <Link href="/about#glossary" className="text-muted hover:text-ink transition-colors">
+          Glossary
+        </Link>
       </nav>
     </header>
   );

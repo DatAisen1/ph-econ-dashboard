@@ -60,6 +60,22 @@ def build_ph_detail_json(df: pd.DataFrame) -> list[dict]:
     working["geolocation_name"] = working["geolocation_name"].apply(_normalize_geolocation_name)
     working["date"] = working["year"].astype(str) + "-" + working["period_num"].astype(str).str.zfill(2)
 
+    # Defensive check: this function assumes exactly ONE row per
+    # (date, geolocation) - i.e. the caller has already filtered to a
+    # single commodity. If that assumption breaks (e.g. someone expands
+    # scope upstream and forgets to filter, exactly as happened once
+    # already in this project), pivot_table's aggfunc="first" would
+    # silently pick an arbitrary value instead of erroring. Catch it here
+    # instead of shipping wrong numbers to the site.
+    duplicate_check = working.groupby(["date", "geolocation_name"]).size()
+    if (duplicate_check > 1).any():
+        bad = duplicate_check[duplicate_check > 1].index[0]
+        raise ValueError(
+            f"Expected exactly one row per (date, geolocation), but found "
+            f"{duplicate_check.max()} for {bad}. Did the caller forget to "
+            f"filter to a single commodity before calling this function?"
+        )
+
     wide = working.pivot_table(
         index="date", columns="geolocation_name", values="cpi_value", aggfunc="first"
     )
@@ -68,6 +84,30 @@ def build_ph_detail_json(df: pd.DataFrame) -> list[dict]:
     # NaN (missing months) must survive as JSON null, not be dropped or
     # coerced to 0 - a 0 would look like deflation to zero, which is a
     # meaningfully different (and wrong) claim than "no data yet".
+    return _records_with_null_safe_nan(wide)
+
+
+def build_ph_commodity_json(df: pd.DataFrame) -> list[dict]:
+    """Build one wide record per month and geography for CPI commodities."""
+    working = df.copy()
+    working["geolocation_name"] = working["geolocation_name"].apply(_normalize_geolocation_name)
+    working["date"] = working["year"].astype(str) + "-" + working["period_num"].astype(str).str.zfill(2)
+
+    duplicate_check = working.groupby(["date", "geolocation_name", "commodity_name"]).size()
+    if (duplicate_check > 1).any():
+        bad = duplicate_check[duplicate_check > 1].index[0]
+        raise ValueError(
+            f"Expected exactly one row per (date, geolocation, commodity), but found "
+            f"{duplicate_check.max()} for {bad}."
+        )
+
+    wide = working.pivot_table(
+        index=["date", "geolocation_name"],
+        columns="commodity_name",
+        values="cpi_value",
+        aggfunc="first",
+    ).reset_index()
+    wide = wide.sort_values(["date", "geolocation_name"])
     return _records_with_null_safe_nan(wide)
 
 
@@ -92,4 +132,3 @@ def build_country_comparison_json(df: pd.DataFrame) -> dict:
             "series": series,
         }
     return result
-

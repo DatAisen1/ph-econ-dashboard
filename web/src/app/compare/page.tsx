@@ -2,11 +2,15 @@ import countryData from "../../../public/data/country_comparison.json";
 import metadata from "../../../public/data/metadata.json";
 import SiteHeader from "@/components/SiteHeader";
 import CompareView from "@/components/CompareView";
+import DataProvenance from "@/components/DataProvenance";
 import LastUpdated from "@/components/LastUpdated";
 import type { CountryComparisonData, ExportMetadata } from "@/lib/types";
 
 const data = countryData as CountryComparisonData;
 const meta = metadata as ExportMetadata;
+const latestYear = Math.max(
+  ...Object.values(data).flatMap((indicator) => indicator.series.map((row) => row.year)),
+);
 
 export default function ComparePage() {
   return (
@@ -24,6 +28,14 @@ export default function ComparePage() {
         </div>
 
         <CompareView data={data} />
+        <DataProvenance
+          source="World Bank Open Data"
+          sourceUrl="https://data.worldbank.org"
+          dataset="Macroeconomic indicators"
+          frequency="Annual"
+          latestObservation={String(latestYear)}
+          refreshedAt={meta.exported_at_utc}
+        />
       </main>
     </>
   );

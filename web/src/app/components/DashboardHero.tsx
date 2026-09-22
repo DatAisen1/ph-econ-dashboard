@@ -4,13 +4,8 @@ import { useState } from "react";
 import PhZoneMap from "./PhZoneMap";
 import CpiTrendChart from "./CpiTrendChart";
 import ChangeBadge from "./ChangeBadge";
-import type { PhDetailRecord } from "@/lib/types";
+import type { PhDetailRecord, RegionGeoJson } from "@/lib/types";
 import type { ChangeResult } from "@/lib/format";
-
-const ZONE_TO_CHART_KEY: Record<string, string> = {
-  NCR: "National Capital Region (NCR)",
-  AONCR: "Areas Outside National Capital Region (AONCR)",
-};
 
 export default function DashboardHero({
   phDetail,
@@ -21,14 +16,22 @@ export default function DashboardHero({
   yoyChange,
 }: {
   phDetail: PhDetailRecord[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  geojson: any;
+  geojson: RegionGeoJson;
   latestDate: string;
   latestNational: number;
   momChange: ChangeResult | null;
   yoyChange: ChangeResult | null;
 }) {
-  const [selectedZone, setSelectedZone] = useState<string | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+
+  // Look up the short display label for whichever region is selected -
+  // the map only gives us the data key (psa_geolocation_name) on click,
+  // this finds its matching short label ("Region III", "NCR", etc.) for
+  // display text and the chart legend.
+  const selectedFeature = geojson.features.find(
+    (f) => f.properties.psa_geolocation_name === selectedRegion
+  );
+  const selectedLabel = selectedFeature?.properties.zone_id;
 
   return (
     <>
@@ -53,18 +56,20 @@ export default function DashboardHero({
             <ChangeBadge change={yoyChange} label="YoY" />
           </div>
           <p className="text-sm text-muted mt-6">
-            {selectedZone
-              ? `Showing ${selectedZone === "NCR" ? "National Capital Region" : "Areas Outside NCR"} in the chart below.`
-              : "Click a zone on the map to highlight it in the chart below."}
+            {selectedLabel
+              ? `Comparing ${selectedLabel} against the national trend below.`
+              : "Click a region on the map to compare it against the national trend below."}
           </p>
         </div>
         <div className="flex justify-center">
           <PhZoneMap
             geojson={geojson}
             phDetail={phDetail}
-            selectedZone={selectedZone}
-            onSelectZone={(zoneId) =>
-              setSelectedZone((current) => (current === zoneId ? null : zoneId))
+            selectedZone={selectedRegion}
+            onSelectZone={(psaGeolocationName) =>
+              setSelectedRegion((current) =>
+                current === psaGeolocationName ? null : psaGeolocationName
+              )
             }
           />
         </div>
@@ -72,12 +77,11 @@ export default function DashboardHero({
 
       <section>
         <h2 className="font-display text-xl mb-6">
-          CPI trend, National Capital Region and rest of the country
+          {selectedLabel
+            ? `CPI trend, ${selectedLabel} vs. national`
+            : "CPI trend, national"}
         </h2>
-        <CpiTrendChart
-          data={phDetail}
-          highlightKey={selectedZone ? ZONE_TO_CHART_KEY[selectedZone] : null}
-        />
+        <CpiTrendChart data={phDetail} selectedRegion={selectedRegion} selectedRegionLabel={selectedLabel} />
       </section>
     </>
   );

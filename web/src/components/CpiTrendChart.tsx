@@ -15,12 +15,6 @@ import {
 import type { PhDetailRecord } from "@/lib/types";
 import { downloadCsv, downloadChartAsPng } from "@/lib/chartExport";
 
-const SERIES = [
-  { key: "PHILIPPINES", label: "Philippines (national)", color: "var(--color-institutional)" },
-  { key: "National Capital Region (NCR)", label: "NCR", color: "var(--color-signal)" },
-  { key: "Areas Outside National Capital Region (AONCR)", label: "AONCR", color: "var(--color-muted)" },
-] as const;
-
 export default function CpiTrendChart({
   data,
   highlightKey,
@@ -85,7 +79,12 @@ export default function CpiTrendChart({
               labelStyle={{ fontFamily: "var(--font-mono)", fontWeight: 600 }}
             />
             <Legend wrapperStyle={{ fontFamily: "var(--font-sans)", fontSize: 13 }} />
-            {SERIES.map((s) => {
+            {[
+              { key: "PHILIPPINES", label: "Philippines (national)", color: "var(--color-institutional)" },
+              ...(highlightKey && highlightKey !== "PHILIPPINES"
+                ? [{ key: highlightKey, label: highlightKey, color: "var(--color-signal)" }]
+                : []),
+            ].map((s) => {
               const isDimmed = highlightKey != null && s.key !== highlightKey;
               return (
                 <Line

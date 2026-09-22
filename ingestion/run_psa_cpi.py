@@ -41,12 +41,25 @@ def main():
     with pipeline.sql_client() as client:
         count = client.execute_sql("SELECT COUNT(*) FROM raw_psa.cpi_observations")
         print(f"cpi_observations: {count[0][0]} rows")
-        by_geo = client.execute_sql(
-            "SELECT geolocation_name, COUNT(*) FROM raw_psa.cpi_observations "
-            "GROUP BY geolocation_name ORDER BY geolocation_name"
+
+        geo_count = client.execute_sql(
+            "SELECT COUNT(DISTINCT geolocation_name) FROM raw_psa.cpi_observations"
+        )[0][0]
+        commodity_count = client.execute_sql(
+            "SELECT COUNT(DISTINCT commodity_name) FROM raw_psa.cpi_observations"
+        )[0][0]
+        print(f"  {geo_count} distinct geolocations, {commodity_count} distinct commodities")
+
+        # Full per-geolocation breakdown got noisy once we expanded past 3
+        # zones (19 x 14 = 266 groups) - a spot-check sample is more useful
+        # here than dumping every row.
+        print("  Sample geolocations:")
+        sample = client.execute_sql(
+            "SELECT DISTINCT geolocation_name FROM raw_psa.cpi_observations "
+            "ORDER BY geolocation_name LIMIT 5"
         )
-        for name, n in by_geo:
-            print(f"  {name}: {n} rows")
+        for (name,) in sample:
+            print(f"    - {name}")
 
 
 if __name__ == "__main__":

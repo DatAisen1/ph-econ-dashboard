@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import type { CountryComparisonRow } from "@/lib/types";
 import { downloadCsv, downloadChartAsPng } from "@/lib/chartExport";
+import type { IndicatorMetadata } from "@/lib/indicatorMetadata";
 
 // Fixed palette per country so a given country is always the same color
 // across indicators - consistency matters more here than aesthetic
@@ -27,25 +28,43 @@ const COUNTRY_COLORS: Record<string, string> = {
   KOR: "var(--color-muted)",
 };
 
+const COUNTRY_NAMES: Record<string, string> = {
+  PHL: "Philippines",
+  IDN: "Indonesia",
+  THA: "Thailand",
+  VNM: "Vietnam",
+  KOR: "South Korea",
+};
+
 export default function CountryComparisonChart({
   series,
-  indicatorLabel,
+  indicatorId,
+  indicatorMetadata,
+  selectedCountries,
 }: {
   series: CountryComparisonRow[];
-  indicatorLabel: string;
+  indicatorId: string;
+  indicatorMetadata: IndicatorMetadata;
+  selectedCountries: string[];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [range, setRange] = useState<"recent" | "all">("recent");
 
-  const countryCodes = Object.keys(COUNTRY_COLORS).filter((code) =>
-    series.some((row) => row[code] !== undefined)
+  const latestYear = series.at(-1)?.year ?? 0;
+  const chartSeries = range === "recent"
+    ? series.filter((row) => row.year >= latestYear - 9)
+    : series;
+
+  const countryCodes = selectedCountries.filter((code) =>
+    chartSeries.some((row) => row[code] !== undefined)
   );
 
   async function handlePngExport() {
     if (!containerRef.current) return;
     setIsExporting(true);
     try {
-      await downloadChartAsPng(containerRef.current, `ph-compare-${indicatorLabel}.png`);
+      await downloadChartAsPng(containerRef.current, `ph-compare-${indicatorId}.png`);
     } finally {
       setIsExporting(false);
     }
@@ -55,7 +74,7 @@ export default function CountryComparisonChart({
     <div>
       <div className="flex justify-end gap-4 mb-2">
         <button
-          onClick={() => downloadCsv(`ph-compare-${indicatorLabel}.csv`, series)}
+          onClick={() => downloadCsv(`ph-compare-${indicatorId}.csv`, series)}
           className="text-xs font-mono text-muted hover:text-ink transition-colors"
         >
           Download CSV
@@ -69,9 +88,34 @@ export default function CountryComparisonChart({
         </button>
       </div>
 
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+        <p className="font-mono text-xs text-muted">
+          {indicatorMetadata.frequency} observations &middot; {indicatorMetadata.unit}
+        </p>
+        <label className="flex items-center gap-2 text-xs text-muted">
+          <span className="font-mono">TIME WINDOW</span>
+          <select
+            value={range}
+            onChange={(event) => setRange(event.target.value as "recent" | "all")}
+            className="border border-black/15 bg-surface px-2 py-1 text-xs text-ink"
+          >
+            <option value="recent">Recent comparison ({latestYear - 9}-{latestYear})</option>
+            <option value="all">Full history ({series[0]?.year}-{latestYear})</option>
+          </select>
+        </label>
+      </div>
+
+      {countryCodes.length === 0 && <p className="text-sm text-muted py-8">Select at least one country to compare.</p>}
+
+      {indicatorId === "FP.CPI.TOTL.ZG" && range === "recent" && countryCodes.length > 0 && (
+        <p className="text-xs text-muted mb-3">
+          The chart defaults to the latest 10 years for a readable current comparison. Full history remains available; it includes Indonesia&apos;s valid 1966 inflation observation of 1,136.3%.
+        </p>
+      )}
+
       <div ref={containerRef} className="w-full h-96 bg-surface">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={series} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
+          <LineChart data={chartSeries} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
             <XAxis
               dataKey="year"
@@ -95,7 +139,7 @@ export default function CountryComparisonChart({
                 key={code}
                 type="monotone"
                 dataKey={code}
-                name={code}
+                name={COUNTRY_NAMES[code] ?? code}
                 stroke={COUNTRY_COLORS[code]}
                 strokeWidth={2}
                 dot={false}

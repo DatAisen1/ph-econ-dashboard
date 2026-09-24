@@ -108,8 +108,8 @@ export default function DashboardHero({
         />
       </section>
 
-      <RegionalComparisonTable key={resetToken} data={phDetail} geojson={geojson} metric={metric} onMetricChange={setMetric} />
-      <CommodityBreakdownChart key={resetToken} data={phCommodity} regions={["PHILIPPINES", ...geojson.features.map((feature: { properties: { psa_geolocation_name: string } }) => feature.properties.psa_geolocation_name)]} />
+      <RegionalComparisonTable key={`regional-${resetToken}`} data={phDetail} geojson={geojson} metric={metric} onMetricChange={setMetric} />
+      <CommodityBreakdownChart key={`commodity-${resetToken}`} data={phCommodity} regions={["PHILIPPINES", ...geojson.features.map((feature: { properties: { psa_geolocation_name: string } }) => feature.properties.psa_geolocation_name)]} />
     </>
   );
 }

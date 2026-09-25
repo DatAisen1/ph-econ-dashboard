@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import PhZoneMap, { type MapMetric } from "./PhZoneMap";
 import CpiTrendChart from "./CpiTrendChart";
 import CpiKpiSection from "./CpiKpiSection";
@@ -10,6 +9,7 @@ import RegionalComparisonTable from "./RegionalComparisonTable";
 import ChangeBadge from "./ChangeBadge";
 import type { PhCommodityRecord, PhDetailRecord } from "@/lib/types";
 import type { ChangeResult } from "@/lib/format";
+import { useDashboardFilters } from "./DashboardFilters";
 
 export default function DashboardHero({
   phDetail,
@@ -29,13 +29,10 @@ export default function DashboardHero({
   momChange: ChangeResult | null;
   yoyChange: ChangeResult | null;
 }) {
-  const [selectedZone, setSelectedZone] = useState<string | null>(null);
-  const [metric, setMetric] = useState<MapMetric>("index");
-  const [resetToken, setResetToken] = useState(0);
-  const selectedRegion = selectedZone
-    ? geojson.features.find((feature: { properties: { zone_id: string } }) => feature.properties.zone_id === selectedZone)
-        ?.properties.psa_geolocation_name ?? null
-    : null;
+  const { selectedRegion, metric, setSelectedRegion, setMetric, resetFilters } = useDashboardFilters();
+  const selectedZone = geojson.features.find(
+    (feature: { properties: { psa_geolocation_name: string } }) => feature.properties.psa_geolocation_name === selectedRegion,
+  )?.properties.zone_id ?? null;
 
   return (
     <>
@@ -71,9 +68,11 @@ export default function DashboardHero({
             phDetail={phDetail}
             selectedZone={selectedZone}
             metric={metric}
-            onSelectZone={(zoneId) =>
-              setSelectedZone((current) => (current === zoneId ? null : zoneId))
-            }
+            onSelectZone={(zoneId) => {
+              const region = geojson.features.find((feature: { properties: { zone_id: string } }) => feature.properties.zone_id === zoneId)
+                ?.properties.psa_geolocation_name ?? null;
+              setSelectedRegion(selectedRegion === region ? null : region);
+            }}
           />
         </div>
       </div>
@@ -89,7 +88,7 @@ export default function DashboardHero({
             ))}
           </div>
         </div>
-        <button type="button" onClick={() => { setSelectedZone(null); setMetric("index"); setResetToken((value) => value + 1); }} className="text-xs font-mono text-muted border border-black/15 px-3 py-1.5 hover:border-institutional">
+        <button type="button" onClick={resetFilters} className="text-xs font-mono text-muted border border-black/15 px-3 py-1.5 hover:border-institutional">
           Reset filters
         </button>
       </div>
@@ -108,8 +107,8 @@ export default function DashboardHero({
         />
       </section>
 
-      <RegionalComparisonTable key={`regional-${resetToken}`} data={phDetail} geojson={geojson} metric={metric} onMetricChange={setMetric} />
-      <CommodityBreakdownChart key={`commodity-${resetToken}`} data={phCommodity} regions={["PHILIPPINES", ...geojson.features.map((feature: { properties: { psa_geolocation_name: string } }) => feature.properties.psa_geolocation_name)]} />
+      <RegionalComparisonTable data={phDetail} geojson={geojson} metric={metric} onMetricChange={setMetric} />
+      <CommodityBreakdownChart data={phCommodity} regions={["PHILIPPINES", ...geojson.features.map((feature: { properties: { psa_geolocation_name: string } }) => feature.properties.psa_geolocation_name)]} />
     </>
   );
 }

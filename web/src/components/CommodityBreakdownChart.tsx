@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { downloadChartAsPng } from "@/lib/chartExport";
 import type { PhCommodityRecord } from "@/lib/types";
+import { useDashboardFilters } from "./DashboardFilters";
 type CommodityMetric = "index" | "yoy" | "mom";
 
 const COMMODITY_LABELS: Record<string, string> = {
@@ -44,9 +45,10 @@ export default function CommodityBreakdownChart({
   regions: string[];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [selectedRegion, setSelectedRegion] = useState("PHILIPPINES");
-  const [metric, setMetric] = useState<CommodityMetric>("index");
   const [isExporting, setIsExporting] = useState(false);
+  const { selectedRegion, metric, setSelectedRegion, setMetric } = useDashboardFilters();
+  const activeRegion = selectedRegion ?? "PHILIPPINES";
+  const uniqueRegions = [...new Set(regions)];
 
   const commodityKeys = useMemo(
     () => Object.keys(COMMODITY_LABELS).filter((key) => data.some((row) => key in row)),
@@ -55,14 +57,14 @@ export default function CommodityBreakdownChart({
   const latestDate = data.reduce((latest, row) => (row.date > latest ? row.date : latest), "");
   const chartData = useMemo(() => {
     const rowIndex = data.findIndex(
-      (item) => item.date === latestDate && item.geolocation_name === selectedRegion,
+      (item) => item.date === latestDate && item.geolocation_name === activeRegion,
     );
     const row = rowIndex >= 0 ? data[rowIndex] : undefined;
     const comparisonYoyDate = `${Number(latestDate.slice(0, 4)) - 1}${latestDate.slice(4)}`;
     const month = Number(latestDate.slice(5));
     const comparisonMomDate = month === 1 ? `${Number(latestDate.slice(0, 4)) - 1}-12` : `${latestDate.slice(0, 5)}${String(month - 1).padStart(2, "0")}`;
-    const comparisonYoy = data.find((item) => item.date === comparisonYoyDate && item.geolocation_name === selectedRegion);
-    const comparisonMom = data.find((item) => item.date === comparisonMomDate && item.geolocation_name === selectedRegion);
+    const comparisonYoy = data.find((item) => item.date === comparisonYoyDate && item.geolocation_name === activeRegion);
+    const comparisonMom = data.find((item) => item.date === comparisonMomDate && item.geolocation_name === activeRegion);
     const rows = commodityKeys.map((key) => {
         const current = numericValue(row?.[key]);
         const previousYoy = numericValue(comparisonYoy?.[key]);
@@ -73,7 +75,7 @@ export default function CommodityBreakdownChart({
       });
     return rows
       .filter((item) => item.value !== null);
-  }, [commodityKeys, data, latestDate, metric, selectedRegion]);
+  }, [activeRegion, commodityKeys, data, latestDate, metric]);
 
   async function handlePngExport() {
     if (!containerRef.current) return;
@@ -100,11 +102,11 @@ export default function CommodityBreakdownChart({
         <label className="flex flex-col items-start gap-2 text-sm md:flex-row md:items-center">
           <span className="font-mono text-xs text-muted">GEOGRAPHY</span>
           <select
-            value={selectedRegion}
+            value={activeRegion}
             onChange={(event) => setSelectedRegion(event.target.value)}
             className="w-full max-w-full border border-black/15 bg-surface px-3 py-2 text-sm text-ink md:w-auto"
           >
-            {regions.map((region) => (
+            {uniqueRegions.map((region) => (
               <option key={region} value={region}>
                 {region}
               </option>
@@ -186,7 +188,7 @@ export default function CommodityBreakdownChart({
           </tbody>
         </table>
       </div>
-      <p className="font-mono text-xs text-muted mt-3">2018 = 100 &middot; {selectedRegion}</p>
+      <p className="font-mono text-xs text-muted mt-3">2018 = 100 &middot; {activeRegion}</p>
     </section>
   );
 }

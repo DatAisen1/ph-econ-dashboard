@@ -106,7 +106,94 @@ def test_fallback_path_when_combined_call_fails():
     print(f"PASSED (fallback path): recovered after {mock_get.call_count} calls")
 
 
+def test_merge_write_disposition_updates_existing_rows():
+    """
+    Verify that merge write_disposition updates existing rows without creating
+    duplicates. Run the pipeline twice with a changed value and confirm:
+    1. Row count does NOT double (stays at 2)
+    2. The changed value is reflected in the updated row
+    """
+    TEST_DB_PATH.unlink(missing_ok=True)
+
+    # First run with original values
+    mock_response_1 = MagicMock()
+    mock_response_1.json.return_value = _fixture_payload()
+    mock_response_1.raise_for_status.return_value = None
+    mock_get_1 = MagicMock(return_value=mock_response_1)
+
+    with patch("worldbank_source._session.get", mock_get_1):
+        pipeline = dlt.pipeline(
+            pipeline_name="worldbank_test_merge",
+            destination=dlt.destinations.duckdb(str(TEST_DB_PATH)),
+            dataset_name="raw_wb_test_merge",
+        )
+        load_info = pipeline.run(
+            worldbank_source(countries=COUNTRIES, indicators=INDICATORS)
+        )
+        assert not load_info.has_failed_jobs, load_info
+
+    with pipeline.sql_client() as client:
+        count_1 = client.execute_sql("SELECT COUNT(*) FROM raw_wb_test_merge.wb_observations")[0][0]
+        assert count_1 == 2, f"Expected 2 rows after first run, got {count_1}"
+
+    # Second run with a changed value (PHL GDP revised from 437147404860.9 to 450000000000.0)
+    fixture_payload_2 = (
+        {"page": 1, "pages": 1, "per_page": 1000, "total": 2},
+        [
+            {
+                "indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"},
+                "country": {"id": "PH", "value": "Philippines"},
+                "countryiso3code": "PHL",
+                "date": "2023",
+                "value": 450000000000.0,  # REVISED VALUE
+                "unit": "",
+            },
+            {
+                "indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"},
+                "country": {"id": "ID", "value": "Indonesia"},
+                "countryiso3code": "IDN",
+                "date": "2023",
+                "value": 1371171607679.0,  # unchanged
+                "unit": "",
+            },
+        ],
+    )
+
+    mock_response_2 = MagicMock()
+    mock_response_2.json.return_value = fixture_payload_2
+    mock_response_2.raise_for_status.return_value = None
+    mock_get_2 = MagicMock(return_value=mock_response_2)
+
+    with patch("worldbank_source._session.get", mock_get_2):
+        load_info = pipeline.run(
+            worldbank_source(countries=COUNTRIES, indicators=INDICATORS)
+        )
+        assert not load_info.has_failed_jobs, load_info
+
+    with pipeline.sql_client() as client:
+        count_2 = client.execute_sql("SELECT COUNT(*) FROM raw_wb_test_merge.wb_observations")[0][0]
+        assert count_2 == 2, f"Expected 2 rows after second run (merge, not append), got {count_2}"
+
+        # Verify the PHL value was updated
+        phl_value = client.execute_sql(
+            "SELECT value FROM raw_wb_test_merge.wb_observations "
+            "WHERE country_code = 'PHL' AND indicator_code = 'NY.GDP.MKTP.CD' AND year = 2023"
+        )[0][0]
+        assert phl_value == 450000000000.0, f"Expected PHL value to be updated to 450000000000.0, got {phl_value}"
+
+        # Verify IDN value stayed the same
+        idn_value = client.execute_sql(
+            "SELECT value FROM raw_wb_test_merge.wb_observations "
+            "WHERE country_code = 'IDN' AND indicator_code = 'NY.GDP.MKTP.CD' AND year = 2023"
+        )[0][0]
+        assert idn_value == 1371171607679.0, f"Expected IDN value to stay 1371171607679.0, got {idn_value}"
+
+    print("PASSED (merge write_disposition): row count stable at 2, PHL value updated correctly")
+
+
 if __name__ == "__main__":
     test_fast_path_single_combined_call()
     test_fallback_path_when_combined_call_fails()
+    test_merge_write_disposition_updates_existing_rows()
     TEST_DB_PATH.unlink(missing_ok=True)
+    print("ALL PASSED: 3/3")

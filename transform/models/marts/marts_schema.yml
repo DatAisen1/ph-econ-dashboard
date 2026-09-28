@@ -34,6 +34,18 @@ models:
       - name: year
         tests:
           - not_null
+      - name: value
+        tests:
+          # Range-check only for percentage-based indicators (inflation, unemployment)
+          # GDP figures are absolute values with no sane universal range, so we skip
+          # range-checking for those. This test uses a where clause to filter to the
+          # percentage indicators only.
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: -20
+                max_value: 100
+              config:
+                where: "indicator_code IN ('FP.CPI.TOTL.ZG', 'SL.UEM.TOTL.ZS')"
 
   - name: fact_ph_detail
     description: "PSA CPI observations at (geolocation, commodity, year, month) grain - PH-detail companion to fact_country_comparison, kept separate due to differing time grain."
@@ -50,3 +62,9 @@ models:
           - accepted_values:
               arguments:
                 values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      - name: cpi_value
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 30
+                max_value: 250

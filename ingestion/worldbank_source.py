@@ -80,7 +80,11 @@ def _fetch_all_pages(country_batch: str, indicator_param: str, extra_params: dic
     return records
 
 
-@dlt.resource(name="wb_observations", write_disposition="replace")
+@dlt.resource(
+    name="wb_observations",
+    write_disposition="merge",
+    primary_key=("country_code", "indicator_code", "year"),
+)
 def wb_observations(countries: list[str], indicators: dict[str, str]):
     """
     Yields flat (country, indicator, year) observation rows for every
@@ -122,17 +126,16 @@ def worldbank_source(countries: list[str], indicators: dict[str, str]):
     yield wb_observations(countries, indicators)
 
 
-# --- Why "replace", not "append", for this table ---
+# --- Why "merge", not "replace" or "append", for this table ---
 # The World Bank re-publishes revised figures for past years under the SAME
-# (country, indicator, year) key. If we used "append", every run would add a
-# new duplicate row for e.g. PHL/2020 instead of updating it - you'd end up
-# with 2, 3, 10 rows for the same fact after 10 daily runs, and no way to
-# tell which one is "current" without extra logic.
+# (country, indicator, year) key. "append" would add duplicate rows for the
+# same fact on every run, making it impossible to tell which value is current.
+# "replace" wipes the entire table on each run, which is safe but wasteful for
+# a mature pipeline running on a schedule - you lose all historical data that
+# could be useful for diffing or audit trails.
 #
-# "merge" (upsert on a primary key) would actually be the MOST correct
-# choice in a mature pipeline - it updates existing (country, indicator,
-# year) rows and inserts new ones, without wiping history you might want to
-# diff against. We're using "replace" for now because it's simpler to reason
-# about while you're learning, and the WB dataset is small enough that a
-# full reload costs nothing. Upgrading to "merge" with a composite primary
-# key is a good Phase 6 hardening exercise.
+# "merge" (upsert on a primary key) is the correct choice: it updates existing
+# (country, indicator, year) rows with revised values and inserts new ones,
+# without wiping history. With the composite primary key (country_code,
+# indicator_code, year), each fact has exactly one row that reflects the most
+# recent authoritative value from the World Bank API.

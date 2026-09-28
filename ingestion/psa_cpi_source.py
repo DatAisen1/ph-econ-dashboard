@@ -179,7 +179,11 @@ def parse_csv_to_records(csv_text: str) -> list[dict]:
     return records
 
 
-@dlt.resource(name="cpi_observations", write_disposition="replace")
+@dlt.resource(
+    name="cpi_observations",
+    write_disposition="merge",
+    primary_key=("geolocation_name", "commodity_name", "year", "period_num"),
+)
 def cpi_observations():
     csv_text = _fetch_cpi_csv()
     raw_path = _land_raw(csv_text)
@@ -194,9 +198,15 @@ def psa_cpi_source():
     yield cpi_observations()
 
 
-# --- Why "replace", not "merge", for now ---
+# --- Why "merge", not "replace" or "append", for this table ---
 # Same reasoning as World Bank: PSA occasionally revises recent months'
-# figures. "replace" means every run reflects current authoritative values
-# with no stale duplicate rows. "merge" on (geolocation, commodity, year,
-# period) is the natural upgrade once this runs on a schedule long enough
-# that a full reload becomes wasteful.
+# figures. "append" would add duplicate rows for the same (geolocation,
+# commodity, year, period) on every run, making it impossible to tell which
+# value is current. "replace" wipes the entire table on each run, which is
+# safe but wasteful for a mature pipeline running on a schedule.
+#
+# "merge" (upsert on a primary key) is the correct choice: it updates existing
+# (geolocation, commodity, year, period) rows with revised values and inserts
+# new ones, without wiping history. With the composite primary key
+# (geolocation_name, commodity_name, year, period_num), each fact has exactly
+# one row that reflects the most recent authoritative value from PSA.

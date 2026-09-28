@@ -3,6 +3,7 @@ from dagster_dbt import DbtCliResource
 
 from .ingestion_assets import wb_observations_ingested, psa_cpi_ingested
 from .dbt_assets import ph_econ_dbt_assets, dbt_project
+from .export_assets import json_export
 
 all_assets_job = define_asset_job(name="ph_econ_daily_refresh", selection="*")
 
@@ -17,7 +18,7 @@ daily_schedule = ScheduleDefinition(
 )
 
 defs = Definitions(
-    assets=[wb_observations_ingested, psa_cpi_ingested, ph_econ_dbt_assets],
+    assets=[wb_observations_ingested, psa_cpi_ingested, ph_econ_dbt_assets, json_export],
     jobs=[all_assets_job],
     schedules=[daily_schedule],
     resources={

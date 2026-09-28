@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Run ingestion tests
+        run: |
+          cd ingestion
+          python test_worldbank_pipeline.py
+          python test_psa_cpi_pipeline.py
+          python test_jsonstat2.py
+
+      - name: Run export tests
+        run: |
+          cd export
+          python test_transform_export.py
+
+      - name: Run staging tests
+        run: |
+          cd staging
+          python test_transform.py
+
+      - name: Populate warehouse with CI fixture data
+        run: |
+          python scripts/ci_populate_warehouse.py
+
+      - name: Run dbt seed
+        run: |
+          cd transform
+          dbt seed --profiles-dir=.
+
+      - name: Run dbt run
+        run: |
+          cd transform
+          dbt run --profiles-dir=.
+
+      - name: Run dbt test
+        run: |
+          cd transform
+          dbt test --profiles-dir=.
